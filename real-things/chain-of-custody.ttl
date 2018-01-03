@@ -1,0 +1,54 @@
+# baseURI: http://realprov.org/ns/custody
+# imports: http://purl.org/dc/terms/
+# imports: http://www.w3.org/2006/time
+# imports: http://www.w3.org/ns/prov
+# prefix: cust
+
+@prefix cust: <http://realprov.org/ns/custody#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://realprov.org/ns/custody>
+  rdf:type owl:Ontology ;
+  dcterms:created "2018-01-03"^^xsd:date ;
+  dcterms:creator <http://registry.it.csiro.au/sandbox/csiro/person/Simon-Cox> ;
+  dcterms:license <http://registry.it.csiro.au/licence/csiro-open-source-software-v1.0> ;
+  rdfs:comment """An ontology for tracking chain-of-custody of an entity, usually a physical one. 
+Status: experimental""" ;
+  rdfs:label "Chain of custody ontology" ;
+  owl:imports dcterms: ;
+  owl:imports <http://www.w3.org/2006/time> ;
+  owl:imports <http://www.w3.org/ns/prov> ;
+.
+cust:CustodyInterval
+  rdf:type owl:Class ;
+  rdfs:label "An interval during which a specified entity is in custody of a nominated agent" ;
+  rdfs:subClassOf time:ProperInterval ;
+  rdfs:subClassOf prov:Activity ;
+  rdfs:subClassOf [
+      rdf:type owl:Restriction ;
+      owl:cardinality "1"^^xsd:nonNegativeInteger ;
+      owl:onProperty cust:hasCustodyOf ;
+    ] ;
+  rdfs:subClassOf [
+      rdf:type owl:Restriction ;
+      owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+      owl:onProperty prov:wasAssociatedWith ;
+    ] ;
+.
+cust:hasCustodyOf
+  rdf:type owl:ObjectProperty ;
+  rdfs:comment "An explicit property to indicate the custody entity is required because the object of a generic prov:used predicate might play other roles in the CustodyInterval" ;
+  rdfs:domain cust:CustodyInterval ;
+  rdfs:subPropertyOf prov:used ;
+.
+cust:inCustodyOf
+  rdf:type owl:ObjectProperty ;
+  rdfs:range cust:CustodyInterval ;
+  owl:inverseOf cust:hasCustodyOf ;
+.
