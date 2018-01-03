@@ -34,6 +34,7 @@ carb:CPV-2015-07-23
   rdf:type sosa:Observation ;
   rdfs:label "CPV analysis event" ;
   prov:endedAtTime "2015-07-23T13:00:00"^^xsd:dateTime ;
+  prov:generated carb:CarbonateResult_cpv_LF-09 ;
   prov:startedAtTime "2015-07-23T12:00:00"^^xsd:dateTime ;
   prov:used carb:CPVProtocol ;
   prov:used carb:LF-09-2-gt-80 ;
@@ -66,32 +67,20 @@ carb:CarbonateResult_v_LF-09
   prov:wasGeneratedBy carb:Viz-2015-08-02 ;
   sosa:isResultOf carb:Viz-2015-08-02 ;
 .
-carb:CustodyInterval_1
-  rdf:type cust:CustodyInterval ;
-  cust:hasCustodyOf carb:IGSN-CSIWALF09 ;
-  time:intervalMeets carb:CustodyInterval_2 ;
-  time:intervalMetBy carb:FieldSampling-2015-03-25-47 ;
-  prov:endedAtTime "2015-04-17T12:00:00"^^xsd:dateTime ;
-  prov:startedAtTime "2015-03-25T12:15:00"^^xsd:dateTime ;
-  prov:wasAssociatedWith carb:GeologistMR ;
-.
-carb:CustodyInterval_2
-  rdf:type cust:CustodyInterval ;
-  cust:hasCustodyOf carb:IGSN-CSIWALF09 ;
-  time:intervalMetBy carb:CustodyInterval_1 ;
-  prov:endedAtTime "2015-04-18T12:00:00"^^xsd:dateTime ;
-  prov:startedAtTime "2015-04-17T12:00:00"^^xsd:dateTime ;
-  prov:wasAssociatedWith carb:TechnicianAD ;
+carb:Delivering-the-sample
+  rdf:type prov:Communication ;
 .
 carb:FieldSampling-2015-03-25-47
   rdf:type prov:Activity ;
   rdf:type sosa:Sampling ;
   rdfs:label "Specimen retrieval event" ;
   prov:endedAtTime "2015-03-25T12:15:00"^^xsd:dateTime ;
+  prov:generated carb:IGSN-CSIWALF09 ;
   prov:startedAtTime "2015-03-25T12:00:00"^^xsd:dateTime ;
   prov:used carb:LeedervilleFormation ;
   prov:wasAssociatedWith carb:GeologistMR ;
   prov:wasAssociatedWith carb:Hammer-b45 ;
+  sosa:hasResult carb:IGSN-CSIWALF09 ;
   sosa:madeBySampler carb:Hammer-b45 ;
   sosa:resultTime "2015-03-25T12:15:00"^^xsd:dateTime ;
 .
@@ -108,10 +97,12 @@ carb:Grinding-2015-07-18-6
   rdf:type sosa:Sampling ;
   rdfs:label "Grinding Event" ;
   prov:endedAtTime "2015-07-18T13:00:00"^^xsd:dateTime ;
+  prov:generated carb:LF-09-2-pulp ;
   prov:startedAtTime "2015-07-18T12:00:00"^^xsd:dateTime ;
   prov:used carb:LF-09-2 ;
   prov:wasAssociatedWith carb:Mill-m7 ;
   prov:wasAssociatedWith carb:TechnicianAD ;
+  sosa:hasResult carb:LF-09-2-pulp ;
   sosa:madeBySampler carb:Mill-m7 ;
   sosa:resultTime "2015-07-18T13:00:00"^^xsd:dateTime ;
 .
@@ -123,8 +114,8 @@ carb:Hammer-b45
 carb:IGSN-CSIWALF09
   rdf:type prov:Entity ;
   rdf:type sosa:Sample ;
-  cust:inCustodyOf carb:CustodyInterval_1 ;
-  cust:inCustodyOf carb:CustodyInterval_2 ;
+  cust:inCustodyOf carb:Sample-in-custody-of-geo ;
+  cust:inCustodyOf carb:Sample-in-custody-of-tech ;
   rdfs:label "LF-09" ;
   prov:wasDerivedFrom carb:LeedervilleFormation ;
   prov:wasGeneratedBy carb:FieldSampling-2015-03-25-47 ;
@@ -214,6 +205,24 @@ carb:Pulp
   rdf:type sampling:RelationshipNature ;
   rdfs:label "Pulp derived from parent by grinding" ;
 .
+carb:Sample-in-custody-of-geo
+  rdf:type cust:CustodyInterval ;
+  cust:hasCustodyOf carb:IGSN-CSIWALF09 ;
+  time:intervalMeets carb:Sample-in-custody-of-tech ;
+  time:intervalMetBy carb:FieldSampling-2015-03-25-47 ;
+  prov:endedAtTime "2015-04-17T12:00:00"^^xsd:dateTime ;
+  prov:startedAtTime "2015-03-25T12:15:00"^^xsd:dateTime ;
+  prov:wasAssociatedWith carb:GeologistMR ;
+.
+carb:Sample-in-custody-of-tech
+  rdf:type cust:CustodyInterval ;
+  cust:hasCustodyOf carb:IGSN-CSIWALF09 ;
+  time:intervalMeets carb:Splitting-2015-04-18-9 ;
+  time:intervalMetBy carb:Sample-in-custody-of-geo ;
+  prov:endedAtTime "2015-04-18T12:00:00"^^xsd:dateTime ;
+  prov:startedAtTime "2015-04-17T12:00:00"^^xsd:dateTime ;
+  prov:wasAssociatedWith carb:TechnicianAD ;
+.
 carb:Saw-s4
   rdf:type prov:Agent ;
   rdf:type sosa:Sampler ;
@@ -228,10 +237,14 @@ carb:Sieving-2015-07-18
   rdf:type sosa:Sampling ;
   rdfs:label "Sieving event" ;
   prov:endedAtTime "2015-07-18T12:30:00"^^xsd:dateTime ;
+  prov:generated carb:LF-09-2-gt-80 ;
+  prov:generated carb:LF-09-2-lt-80 ;
   prov:startedAtTime "2015-07-18T12:00:00"^^xsd:dateTime ;
   prov:used carb:LF-09-2-pulp ;
   prov:wasAssociatedWith carb:TechnicianAD ;
   prov:wasAssociatedWith carb:TylerSieveStack-80-200 ;
+  sosa:hasResult carb:LF-09-2-gt-80 ;
+  sosa:hasResult carb:LF-09-2-lt-80 ;
   sosa:madeBySampler carb:TylerSieveStack-80-200 ;
   sosa:resultTime "2015-07-18T12:30:00"^^xsd:dateTime ;
 .
@@ -240,10 +253,14 @@ carb:Splitting-2015-04-18-9
   rdf:type sosa:Sampling ;
   rdfs:label "Splitting event" ;
   prov:endedAtTime "2015-04-18T12:05:00"^^xsd:dateTime ;
+  prov:generated carb:LF-09-1 ;
+  prov:generated carb:LF-09-2 ;
   prov:startedAtTime "2015-04-18T12:00:00"^^xsd:dateTime ;
   prov:used carb:IGSN-CSIWALF09 ;
   prov:wasAssociatedWith carb:Saw-s4 ;
   prov:wasAssociatedWith carb:TechnicianAD ;
+  sosa:hasResult carb:LF-09-1 ;
+  sosa:hasResult carb:LF-09-2 ;
   sosa:madeBySampler carb:Saw-s4 ;
   sosa:resultTime "2015-04-18T12:05:00"^^xsd:dateTime ;
 .
@@ -274,6 +291,7 @@ carb:Viz-2015-08-02
   rdf:type sosa:Observation ;
   rdfs:label "Visual analysis event" ;
   prov:endedAtTime "2015-08-02T12:30:00"^^xsd:dateTime ;
+  prov:generated carb:CarbonateResult_v_LF-09 ;
   prov:startedAtTime "2015-08-02T12:00:00"^^xsd:dateTime ;
   prov:used carb:LF-09-2-gt-80 ;
   prov:used carb:LF-09-2-lt-80 ;
