@@ -89,6 +89,7 @@ carb:GeologistMA
   rdfs:label "Maham Aziz" ;
 .
 carb:GeologistMR
+  rdf:type cust:Custodian ;
   rdf:type prov:Agent ;
   rdfs:label "Michelle Rouse" ;
 .
@@ -265,6 +266,7 @@ carb:Splitting-2015-04-18-9
   sosa:resultTime "2015-04-18T12:05:00"^^xsd:dateTime ;
 .
 carb:TechnicianAD
+  rdf:type cust:Custodian ;
   rdf:type prov:Agent ;
   rdfs:label "Amelia Davis" ;
 .

@@ -27,6 +27,7 @@ Status: experimental""" ;
 .
 cust:Custodian
   rdf:type owl:Class ;
+  rdfs:comment "Specialization of Agent required to support cardinality constraint that a Custody Interval can be associaed with only one Custodian" ;
   rdfs:label "Agent who has custody of an Entity" ;
   rdfs:subClassOf prov:Agent ;
 .
