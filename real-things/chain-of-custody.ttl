@@ -25,11 +25,86 @@ Status: experimental""" ;
   owl:imports <http://www.w3.org/2006/time> ;
   owl:imports <http://www.w3.org/ns/prov> ;
 .
+cust:Custodian
+  rdf:type owl:Class ;
+  rdfs:label "Agent who has custody of an Entity" ;
+  rdfs:subClassOf prov:Agent ;
+.
 cust:CustodyInterval
   rdf:type owl:Class ;
+  rdfs:comment "CustodyInterval is modeled as a subclass of prov:Activity because of its association with a prov:Agent, and used a prov:Entity" ;
+  rdfs:comment "CustodyInterval is modeled as a subclass of time:ProperInterval because of its ordering relations with other CustodyIntervals" ;
   rdfs:label "An interval during which a specified entity is in custody of a nominated agent" ;
   rdfs:subClassOf time:ProperInterval ;
   rdfs:subClassOf prov:Activity ;
+  rdfs:subClassOf [
+      rdf:type owl:Class ;
+      owl:unionOf (
+          [
+            rdf:type owl:Restriction ;
+            owl:onClass cust:CustodyInterval ;
+            owl:onProperty time:intervalMeets ;
+            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+          ]
+          [
+            rdf:type owl:Restriction ;
+            owl:onClass cust:CustodyInterval ;
+            owl:onProperty time:intervalOverlaps ;
+            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+          ]
+        ) ;
+    ] ;
+  rdfs:subClassOf [
+      rdf:type owl:Class ;
+      owl:unionOf (
+          [
+            rdf:type owl:Restriction ;
+            owl:onClass cust:CustodyInterval ;
+            owl:onProperty time:intervalMetBy ;
+            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+          ]
+          [
+            rdf:type owl:Restriction ;
+            owl:onClass cust:CustodyInterval ;
+            owl:onProperty time:intervalOverlappedBy ;
+            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+          ]
+        ) ;
+    ] ;
+  rdfs:subClassOf [
+      rdf:type owl:Class ;
+      owl:unionOf (
+          [
+            rdf:type owl:Restriction ;
+            owl:onClass cust:CustodyTransfer ;
+            owl:onProperty time:hasBeginning ;
+            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+          ]
+          [
+            rdf:type owl:Restriction ;
+            owl:onClass cust:CustodyTransfer ;
+            owl:onProperty time:intervalStartedBy ;
+            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+          ]
+        ) ;
+    ] ;
+  rdfs:subClassOf [
+      rdf:type owl:Class ;
+      owl:unionOf (
+          [
+            rdf:type owl:Restriction ;
+            owl:onClass cust:CustodyTransfer ;
+            owl:onProperty time:hasEnd ;
+            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+          ]
+          [
+            rdf:type owl:Restriction ;
+            owl:onClass cust:CustodyTransfer ;
+            owl:onProperty time:intervalFinishedBy ;
+            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+          ]
+        ) ;
+    ] ;
   rdfs:subClassOf [
       rdf:type owl:Restriction ;
       owl:cardinality "1"^^xsd:nonNegativeInteger ;
@@ -37,18 +112,96 @@ cust:CustodyInterval
     ] ;
   rdfs:subClassOf [
       rdf:type owl:Restriction ;
-      owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+      owl:onClass cust:Custodian ;
       owl:onProperty prov:wasAssociatedWith ;
+      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+    ] ;
+.
+cust:CustodyTransfer
+  rdf:type owl:Class ;
+  rdfs:comment """A transfer of custody is modeled as a subclass of time:TemporalEntity. 
+It may be considered to be instantaneous (i.e. a time:Instant) in which case it is the time:hasEnd of one custody interval and time:hasBeginning of another.
+Else a transfer may take a finite duration (i.e. a time:Interval) in which case the Entity is in joint custody during the transfer interval. """ ;
+  rdfs:label "Transfer of custody from one agent to another" ;
+  rdfs:subClassOf time:TemporalEntity ;
+  rdfs:subClassOf prov:Activity ;
+  rdfs:subClassOf [
+      rdf:type owl:Class ;
+      owl:unionOf (
+          [
+            rdf:type owl:Restriction ;
+            owl:hasValue time:Instant ;
+            owl:onProperty rdf:type ;
+          ]
+          [
+            rdf:type owl:Class ;
+            owl:intersectionOf (
+                [
+                  rdf:type owl:Restriction ;
+                  owl:hasValue time:ProperInterval ;
+                  owl:onProperty rdf:type ;
+                ]
+                [
+                  rdf:type owl:Restriction ;
+                  owl:onClass cust:CustodyInterval ;
+                  owl:onProperty time:intervalFinishes ;
+                  owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                ]
+                [
+                  rdf:type owl:Restriction ;
+                  owl:onClass cust:CustodyInterval ;
+                  owl:onProperty time:intervalStarts ;
+                  owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                ]
+              ) ;
+          ]
+        ) ;
+    ] ;
+  rdfs:subClassOf [
+      rdf:type owl:Restriction ;
+      owl:cardinality "1"^^xsd:nonNegativeInteger ;
+      owl:onProperty cust:newCustodian ;
+    ] ;
+  rdfs:subClassOf [
+      rdf:type owl:Restriction ;
+      owl:cardinality "1"^^xsd:nonNegativeInteger ;
+      owl:onProperty cust:oldCustodian ;
+    ] ;
+  rdfs:subClassOf [
+      rdf:type owl:Restriction ;
+      owl:cardinality "1"^^xsd:nonNegativeInteger ;
+      owl:onProperty cust:transfersCustodyOf ;
     ] ;
 .
 cust:hasCustodyOf
   rdf:type owl:ObjectProperty ;
   rdfs:comment "An explicit property to indicate the custody entity is required because the object of a generic prov:used predicate might play other roles in the CustodyInterval" ;
   rdfs:domain cust:CustodyInterval ;
+  rdfs:range prov:Entity ;
   rdfs:subPropertyOf prov:used ;
 .
 cust:inCustodyOf
   rdf:type owl:ObjectProperty ;
-  rdfs:range cust:CustodyInterval ;
   owl:inverseOf cust:hasCustodyOf ;
+.
+cust:newCustodian
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain cust:CustodyTransfer ;
+  rdfs:label "Custodian of the entity after the transfer" ;
+  rdfs:range cust:Custodian ;
+  rdfs:subPropertyOf prov:wasAssociatedWith ;
+.
+cust:oldCustodian
+  rdf:type owl:ObjectProperty ;
+  rdfs:domain cust:CustodyTransfer ;
+  rdfs:label "Custodian of the entity before the transfer" ;
+  rdfs:range cust:Custodian ;
+  rdfs:subPropertyOf prov:wasAssociatedWith ;
+.
+cust:transfersCustodyOf
+  rdf:type owl:ObjectProperty ;
+  rdfs:comment "Link to the entity whose custody is being transferred" ;
+  rdfs:domain cust:CustodyTransfer ;
+  rdfs:range prov:Entity ;
+  rdfs:subPropertyOf prov:used ;
 .
