@@ -35,77 +35,23 @@ cust:CustodyInterval
   rdf:type owl:Class ;
   rdfs:comment "CustodyInterval is modeled as a subclass of prov:Activity because of its association with a prov:Agent, and used a prov:Entity" ;
   rdfs:comment "CustodyInterval is modeled as a subclass of time:ProperInterval because of its ordering relations with other CustodyIntervals" ;
+  rdfs:comment """If transfer of custody is not instantaneous, there is joint custody during the overlapping transfer interval. 
+This might be expressed as guarded constraints as follows:
+
+((time:hasBeginning exactly 1 cust:CustodyTransfer) and (time:intervalMetBy exactly 1 cust:CustodyInterval))
+ or 
+((time:intervalStartedBy exactly 1 cust:CustodyTransfer)  and (time:intervalOverlappedBy exactly 1 cust:CustodyInterval))
+
+and
+
+((time:hasEnd exactly 1 cust:CustodyTransfer) and (time:intervalMeets exactly 1 cust:CustodyInterval))
+ or 
+((time:intervalFinishedBy exactly 1 cust:CustodyTransfer) and (time:intervalOverlaps exactly 1 cust:CustodyInterval))
+
+but this only applies if all the CustodyTransfer and CustodyInterval individuals relate to the same Entity, so these constraints probably cannot be expressed as OWL axioms""" ;
   rdfs:label "An interval during which a specified entity is in custody of a nominated agent" ;
   rdfs:subClassOf time:ProperInterval ;
   rdfs:subClassOf prov:Activity ;
-  rdfs:subClassOf [
-      rdf:type owl:Class ;
-      owl:unionOf (
-          [
-            rdf:type owl:Restriction ;
-            owl:onClass cust:CustodyInterval ;
-            owl:onProperty time:intervalMeets ;
-            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-          ]
-          [
-            rdf:type owl:Restriction ;
-            owl:onClass cust:CustodyInterval ;
-            owl:onProperty time:intervalOverlaps ;
-            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-          ]
-        ) ;
-    ] ;
-  rdfs:subClassOf [
-      rdf:type owl:Class ;
-      owl:unionOf (
-          [
-            rdf:type owl:Restriction ;
-            owl:onClass cust:CustodyInterval ;
-            owl:onProperty time:intervalMetBy ;
-            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-          ]
-          [
-            rdf:type owl:Restriction ;
-            owl:onClass cust:CustodyInterval ;
-            owl:onProperty time:intervalOverlappedBy ;
-            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-          ]
-        ) ;
-    ] ;
-  rdfs:subClassOf [
-      rdf:type owl:Class ;
-      owl:unionOf (
-          [
-            rdf:type owl:Restriction ;
-            owl:onClass cust:CustodyTransfer ;
-            owl:onProperty time:hasBeginning ;
-            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-          ]
-          [
-            rdf:type owl:Restriction ;
-            owl:onClass cust:CustodyTransfer ;
-            owl:onProperty time:intervalStartedBy ;
-            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-          ]
-        ) ;
-    ] ;
-  rdfs:subClassOf [
-      rdf:type owl:Class ;
-      owl:unionOf (
-          [
-            rdf:type owl:Restriction ;
-            owl:onClass cust:CustodyTransfer ;
-            owl:onProperty time:hasEnd ;
-            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-          ]
-          [
-            rdf:type owl:Restriction ;
-            owl:onClass cust:CustodyTransfer ;
-            owl:onProperty time:intervalFinishedBy ;
-            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-          ]
-        ) ;
-    ] ;
   rdfs:subClassOf [
       rdf:type owl:Restriction ;
       owl:cardinality "1"^^xsd:nonNegativeInteger ;
@@ -122,42 +68,18 @@ cust:CustodyTransfer
   rdf:type owl:Class ;
   rdfs:comment """A transfer of custody is modeled as a subclass of time:TemporalEntity. 
 It may be considered to be instantaneous (i.e. a time:Instant) in which case it is the time:hasEnd of one custody interval and time:hasBeginning of another.
-Else a transfer may take a finite duration (i.e. a time:Interval) in which case the Entity is in joint custody during the transfer interval. """ ;
+Else a transfer may take a finite duration (i.e. a time:Interval) in which case the Entity is in joint custody during the transfer interval. 
+
+These conditions might be expressed as guarded constraints as follows:
+
+(rdf:type value time:Instant) 
+or 
+((rdf:type value time:ProperInterval) and (time:intervalFinishes exactly 1 cust:CustodyInterval) and (time:intervalStarts exactly 1 cust:CustodyInterval))
+
+but this only applies if all the CustodyTransfer and CustodyInterval individuals relate to the same Entity, so these constraints probably cannot be expressed as OWL axioms""" ;
   rdfs:label "Transfer of custody from one agent to another" ;
   rdfs:subClassOf time:TemporalEntity ;
   rdfs:subClassOf prov:Activity ;
-  rdfs:subClassOf [
-      rdf:type owl:Class ;
-      owl:unionOf (
-          [
-            rdf:type owl:Restriction ;
-            owl:hasValue time:Instant ;
-            owl:onProperty rdf:type ;
-          ]
-          [
-            rdf:type owl:Class ;
-            owl:intersectionOf (
-                [
-                  rdf:type owl:Restriction ;
-                  owl:hasValue time:ProperInterval ;
-                  owl:onProperty rdf:type ;
-                ]
-                [
-                  rdf:type owl:Restriction ;
-                  owl:onClass cust:CustodyInterval ;
-                  owl:onProperty time:intervalFinishes ;
-                  owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                ]
-                [
-                  rdf:type owl:Restriction ;
-                  owl:onClass cust:CustodyInterval ;
-                  owl:onProperty time:intervalStarts ;
-                  owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                ]
-              ) ;
-          ]
-        ) ;
-    ] ;
   rdfs:subClassOf [
       rdf:type owl:Restriction ;
       owl:cardinality "1"^^xsd:nonNegativeInteger ;
