@@ -1,52 +1,61 @@
-# baseURI: http://realprov.org/ns/custody
+# baseURI: http://realprov.org/ns/real-thing
 # imports: http://purl.org/dc/terms/
 # imports: http://www.w3.org/2006/time
+# imports: http://www.w3.org/ns/locn
 # imports: http://www.w3.org/ns/prov
-# prefix: cust
+# imports: http://www.w3.org/ns/sosa/prov
+# imports: http://www.w3.org/ns/sosa/sampling
+# imports: http://www.w3.org/ns/ssn/
+# prefix: real
 
-@prefix cust: <http://realprov.org/ns/custody#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix real: <http://realprov.org/ns/real-thing#> .
+@prefix sampling: <http://www.w3.org/ns/sosa/sampling/> .
 @prefix time: <http://www.w3.org/2006/time#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<http://realprov.org/ns/custody>
+<http://realprov.org/ns/real-thing>
   rdf:type owl:Ontology ;
   dcterms:created "2018-01-03"^^xsd:date ;
   dcterms:creator <http://registry.it.csiro.au/sandbox/csiro/person/Simon-Cox> ;
   dcterms:license <http://registry.it.csiro.au/licence/csiro-open-source-software-v1.0> ;
-  rdfs:comment """An ontology for tracking chain-of-custody of an entity, usually a physical one. 
+  rdfs:comment """An ontology for tracking chain-of-custody of an entity, usually a physical one.
 Status: experimental""" ;
   rdfs:label "Chain of custody ontology" ;
   owl:imports dcterms: ;
   owl:imports <http://www.w3.org/2006/time> ;
+  owl:imports <http://www.w3.org/ns/locn> ;
   owl:imports <http://www.w3.org/ns/prov> ;
+  owl:imports <http://www.w3.org/ns/sosa/prov> ;
+  owl:imports <http://www.w3.org/ns/sosa/sampling> ;
+  owl:imports <http://www.w3.org/ns/ssn/> ;
 .
-cust:Custodian
+real:Custodian
   rdf:type owl:Class ;
   rdfs:comment "Specialization of Agent required to support cardinality constraint that a Custody Interval can be associaed with only one Custodian" ;
   rdfs:label "Agent who has custody of an Entity" ;
   rdfs:subClassOf prov:Agent ;
 .
-cust:CustodyInterval
+real:CustodyInterval
   rdf:type owl:Class ;
   rdfs:comment "CustodyInterval is modeled as a subclass of prov:Activity because of its association with a prov:Agent, and used a prov:Entity" ;
   rdfs:comment "CustodyInterval is modeled as a subclass of time:ProperInterval because of its ordering relations with other CustodyIntervals" ;
-  rdfs:comment """If transfer of custody is not instantaneous, there is joint custody during the overlapping transfer interval. 
+  rdfs:comment """If transfer of custody is not instantaneous, there is joint custody during the overlapping transfer interval.
 This might be expressed as guarded constraints as follows:
 
-((time:hasBeginning exactly 1 cust:CustodyTransfer) and (time:intervalMetBy exactly 1 cust:CustodyInterval))
- or 
-((time:intervalStartedBy exactly 1 cust:CustodyTransfer)  and (time:intervalOverlappedBy exactly 1 cust:CustodyInterval))
+((time:hasBeginning exactly 1 real:CustodyTransfer) and (time:intervalMetBy exactly 1 real:CustodyInterval))
+ or
+((time:intervalStartedBy exactly 1 real:CustodyTransfer)  and (time:intervalOverlappedBy exactly 1 real:CustodyInterval))
 
 and
 
-((time:hasEnd exactly 1 cust:CustodyTransfer) and (time:intervalMeets exactly 1 cust:CustodyInterval))
- or 
-((time:intervalFinishedBy exactly 1 cust:CustodyTransfer) and (time:intervalOverlaps exactly 1 cust:CustodyInterval))
+((time:hasEnd exactly 1 real:CustodyTransfer) and (time:intervalMeets exactly 1 real:CustodyInterval))
+ or
+((time:intervalFinishedBy exactly 1 real:CustodyTransfer) and (time:intervalOverlaps exactly 1 real:CustodyInterval))
 
 but this only applies if all the CustodyTransfer and CustodyInterval individuals relate to the same Entity, so these constraints probably cannot be expressed as OWL axioms""" ;
   rdfs:label "An interval during which a specified entity is in custody of a nominated agent" ;
@@ -55,26 +64,26 @@ but this only applies if all the CustodyTransfer and CustodyInterval individuals
   rdfs:subClassOf [
       rdf:type owl:Restriction ;
       owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty cust:hasCustodyOf ;
+      owl:onProperty real:hasCustodyOf ;
     ] ;
   rdfs:subClassOf [
       rdf:type owl:Restriction ;
-      owl:onClass cust:Custodian ;
+      owl:onClass real:Custodian ;
       owl:onProperty prov:wasAssociatedWith ;
       owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
     ] ;
 .
-cust:CustodyTransfer
+real:CustodyTransfer
   rdf:type owl:Class ;
-  rdfs:comment """A transfer of custody is modeled as a subclass of time:TemporalEntity. 
+  rdfs:comment """A transfer of custody is modeled as a subclass of time:TemporalEntity.
 It may be considered to be instantaneous (i.e. a time:Instant) in which case it is the time:hasEnd of one custody interval and time:hasBeginning of another.
-Else a transfer may take a finite duration (i.e. a time:Interval) in which case the Entity is in joint custody during the transfer interval. 
+Else a transfer may take a finite duration (i.e. a time:Interval) in which case the Entity is in joint custody during the transfer interval.
 
 These conditions might be expressed as guarded constraints as follows:
 
-(rdf:type value time:Instant) 
-or 
-((rdf:type value time:ProperInterval) and (time:intervalFinishes exactly 1 cust:CustodyInterval) and (time:intervalStarts exactly 1 cust:CustodyInterval))
+(rdf:type value time:Instant)
+or
+((rdf:type value time:ProperInterval) and (time:intervalFinishes exactly 1 real:CustodyInterval) and (time:intervalStarts exactly 1 real:CustodyInterval))
 
 but this only applies if all the CustodyTransfer and CustodyInterval individuals relate to the same Entity, so these constraints probably cannot be expressed as OWL axioms""" ;
   rdfs:label "Transfer of custody from one agent to another" ;
@@ -83,48 +92,53 @@ but this only applies if all the CustodyTransfer and CustodyInterval individuals
   rdfs:subClassOf [
       rdf:type owl:Restriction ;
       owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty cust:newCustodian ;
+      owl:onProperty real:newCustodian ;
     ] ;
   rdfs:subClassOf [
       rdf:type owl:Restriction ;
       owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty cust:oldCustodian ;
+      owl:onProperty real:oldCustodian ;
     ] ;
   rdfs:subClassOf [
       rdf:type owl:Restriction ;
       owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty cust:transfersCustodyOf ;
+      owl:onProperty real:transfersCustodyOf ;
     ] ;
 .
-cust:hasCustodyOf
+real:Specimen
+  rdf:type owl:Class ;
+  rdfs:label "Material sample or specimen" ;
+  rdfs:subClassOf <http://www.w3.org/ns/sosa/Sample> ;
+.
+real:hasCustodyOf
   rdf:type owl:ObjectProperty ;
   rdfs:comment "An explicit property to indicate the custody entity is required because the object of a generic prov:used predicate might play other roles in the CustodyInterval" ;
-  rdfs:domain cust:CustodyInterval ;
+  rdfs:domain real:CustodyInterval ;
   rdfs:range prov:Entity ;
   rdfs:subPropertyOf prov:used ;
 .
-cust:inCustodyOf
+real:inCustodyOf
   rdf:type owl:ObjectProperty ;
-  owl:inverseOf cust:hasCustodyOf ;
+  owl:inverseOf real:hasCustodyOf ;
 .
-cust:newCustodian
+real:newCustodian
   rdf:type owl:ObjectProperty ;
-  rdfs:domain cust:CustodyTransfer ;
+  rdfs:domain real:CustodyTransfer ;
   rdfs:label "Custodian of the entity after the transfer" ;
-  rdfs:range cust:Custodian ;
+  rdfs:range real:Custodian ;
   rdfs:subPropertyOf prov:wasAssociatedWith ;
 .
-cust:oldCustodian
+real:oldCustodian
   rdf:type owl:ObjectProperty ;
-  rdfs:domain cust:CustodyTransfer ;
+  rdfs:domain real:CustodyTransfer ;
   rdfs:label "Custodian of the entity before the transfer" ;
-  rdfs:range cust:Custodian ;
+  rdfs:range real:Custodian ;
   rdfs:subPropertyOf prov:wasAssociatedWith ;
 .
-cust:transfersCustodyOf
+real:transfersCustodyOf
   rdf:type owl:ObjectProperty ;
   rdfs:comment "Link to the entity whose custody is being transferred" ;
-  rdfs:domain cust:CustodyTransfer ;
+  rdfs:domain real:CustodyTransfer ;
   rdfs:range prov:Entity ;
   rdfs:subPropertyOf prov:used ;
 .
