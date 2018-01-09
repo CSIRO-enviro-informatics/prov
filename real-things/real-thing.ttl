@@ -3,9 +3,6 @@
 # imports: http://www.w3.org/2006/time
 # imports: http://www.w3.org/ns/locn
 # imports: http://www.w3.org/ns/prov
-# imports: http://www.w3.org/ns/sosa/prov
-# imports: http://www.w3.org/ns/sosa/sampling
-# imports: http://www.w3.org/ns/ssn/
 # prefix: real
 
 @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -30,9 +27,6 @@ Status: experimental""" ;
   owl:imports <http://www.w3.org/2006/time> ;
   owl:imports <http://www.w3.org/ns/locn> ;
   owl:imports <http://www.w3.org/ns/prov> ;
-  owl:imports <http://www.w3.org/ns/sosa/prov> ;
-  owl:imports <http://www.w3.org/ns/sosa/sampling> ;
-  owl:imports <http://www.w3.org/ns/ssn/> ;
 .
 real:Custodian
   rdf:type owl:Class ;
@@ -105,10 +99,26 @@ but this only applies if all the CustodyTransfer and CustodyInterval individuals
       owl:onProperty real:transfersCustodyOf ;
     ] ;
 .
-real:Specimen
+real:Entity
   rdf:type owl:Class ;
-  rdfs:label "Material sample or specimen" ;
-  rdfs:subClassOf <http://www.w3.org/ns/sosa/Sample> ;
+  rdfs:comment "A real thing either has a (current) location, else has been replaced by another thing through some kind of transformation. " ;
+  rdfs:label "Physical thing or material entity" ;
+  rdfs:subClassOf prov:Entity ;
+  rdfs:subClassOf [
+      rdf:type owl:Class ;
+      owl:unionOf (
+          [
+            rdf:type owl:Restriction ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onProperty dcterms:isReplacedBy ;
+          ]
+          [
+            rdf:type owl:Restriction ;
+            owl:cardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onProperty <http://www.w3.org/ns/locn#location> ;
+          ]
+        ) ;
+    ] ;
 .
 real:hasCustodyOf
   rdf:type owl:ObjectProperty ;
