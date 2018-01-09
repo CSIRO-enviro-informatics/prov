@@ -1,7 +1,6 @@
 # baseURI: http://realprov.org/ns/real-thing
 # imports: http://purl.org/dc/terms/
 # imports: http://www.w3.org/2006/time
-# imports: http://www.w3.org/ns/locn
 # imports: http://www.w3.org/ns/prov
 # prefix: real
 
@@ -29,7 +28,6 @@ Status: experimental""" ;
   rdfs:label "Real things ontology" ;
   owl:imports dcterms: ;
   owl:imports <http://www.w3.org/2006/time> ;
-  owl:imports <http://www.w3.org/ns/locn> ;
   owl:imports <http://www.w3.org/ns/prov> ;
 .
 real:Custodian
@@ -105,7 +103,12 @@ but this only applies if all the CustodyTransfer and CustodyInterval individuals
 .
 real:Entity
   rdf:type owl:Class ;
-  rdfs:comment "A real thing either has a (current) location, else has been replaced by another thing through some kind of transformation. " ;
+  rdfs:comment """A real thing either has a (current) location, else has been replaced by other thing(s) through some kind of transformation. 
+Destruction is a special case where it has been transformed into nothing. A special individual
+
+   real:nothing a prov:Entity .
+
+is provided to support the last case.""" ;
   rdfs:label "Physical thing or material entity" ;
   rdfs:subClassOf prov:Entity ;
   rdfs:subClassOf [
@@ -119,16 +122,10 @@ real:Entity
           [
             rdf:type owl:Restriction ;
             owl:cardinality "1"^^xsd:nonNegativeInteger ;
-            owl:onProperty <http://www.w3.org/ns/locn#location> ;
+            owl:onProperty prov:atLocation ;
           ]
         ) ;
     ] ;
-.
-real:Nothing
-  rdf:type owl:Thing ;
-  rdfs:comment """Individual corresponding to nothing. 
-Provided for use in succession relationships to indicate when a real thing has been destroyed.""" ;
-  rdfs:label "Nothing" ;
 .
 real:custodianRole
   rdf:type prov:Role ;
@@ -215,6 +212,18 @@ real:newCustodian
 real:newCustodianRole
   rdf:type prov:Role ;
   rdfs:label "New (subsequent) custodian role" ;
+.
+real:nothing
+  rdf:type prov:Entity ;
+  rdfs:comment """Individual corresponding to nothing. 
+Provided for use in relationships when a real thing does not physically exist.""" ;
+  rdfs:label "Nothing" ;
+.
+real:nowhere
+  rdf:type prov:Location ;
+  rdfs:comment """Individual corresponding to nowhere. 
+Provided for use in relationships to indicate when a real thing has no physical location.""" ;
+  rdfs:label "Nowhere" ;
 .
 real:oldCustodian
   rdf:type owl:ObjectProperty ;
