@@ -46,13 +46,13 @@ real:CustodyInterval
 This might be expressed as guarded constraints as follows:
 
 ((time:hasBeginning exactly 1 real:CustodyTransfer) and (time:intervalMetBy exactly 1 real:CustodyInterval))
- or
+ xor
 ((time:intervalStartedBy exactly 1 real:CustodyTransfer)  and (time:intervalOverlappedBy exactly 1 real:CustodyInterval))
 
 and
 
 ((time:hasEnd exactly 1 real:CustodyTransfer) and (time:intervalMeets exactly 1 real:CustodyInterval))
- or
+ xor
 ((time:intervalFinishedBy exactly 1 real:CustodyTransfer) and (time:intervalOverlaps exactly 1 real:CustodyInterval))
 
 but this only applies if all the CustodyTransfer and CustodyInterval individuals relate to the same Entity, so these constraints probably cannot be expressed as OWL axioms""" ;
@@ -80,7 +80,7 @@ Else a transfer may take a finite duration (i.e. a time:Interval) in which case 
 These conditions might be expressed as guarded constraints as follows:
 
 (rdf:type value time:Instant)
-or
+xor
 ((rdf:type value time:ProperInterval) and (time:intervalFinishes exactly 1 real:CustodyInterval) and (time:intervalStarts exactly 1 real:CustodyInterval))
 
 but this only applies if all the CustodyTransfer and CustodyInterval individuals relate to the same Entity, so these constraints probably cannot be expressed as OWL axioms""" ;
@@ -110,7 +110,7 @@ real:Entity
   rdfs:subClassOf prov:Entity ;
   rdfs:subClassOf [
       rdf:type owl:Class ;
-      owl:unionOf (
+      owl:disjointUnionOf (
           [
             rdf:type owl:Restriction ;
             owl:minCardinality "1"^^xsd:nonNegativeInteger ;
