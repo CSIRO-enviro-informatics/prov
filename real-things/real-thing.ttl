@@ -17,12 +17,16 @@
 
 <http://realprov.org/ns/real-thing>
   rdf:type owl:Ontology ;
+  dcterms:contributor <http://people.csiro.au/Nicholas-Car> ;
   dcterms:created "2018-01-03"^^xsd:date ;
   dcterms:creator <http://registry.it.csiro.au/sandbox/csiro/person/Simon-Cox> ;
   dcterms:license <http://registry.it.csiro.au/licence/csiro-open-source-software-v1.0> ;
-  rdfs:comment """An ontology for tracking chain-of-custody of an entity, usually a physical one.
+  dcterms:modified "2018-01-09" ;
+  rdfs:comment """An ontology for real or material things, based on the PROV ontology.  
+The focus is particularly on supporting chain-of-custody applications. 
+
 Status: experimental""" ;
-  rdfs:label "Chain of custody ontology" ;
+  rdfs:label "Real things ontology" ;
   owl:imports dcterms: ;
   owl:imports <http://www.w3.org/2006/time> ;
   owl:imports <http://www.w3.org/ns/locn> ;
@@ -119,6 +123,12 @@ real:Entity
           ]
         ) ;
     ] ;
+.
+real:Nothing
+  rdf:type owl:Thing ;
+  rdfs:comment """Individual corresponding to nothing. 
+Provided for use in succession relationships to indicate when a real thing has been destroyed.""" ;
+  rdfs:label "Nothing" ;
 .
 real:hasCustodyOf
   rdf:type owl:ObjectProperty ;
