@@ -1,17 +1,14 @@
 # baseURI: http://prov.example.org/real/carbonate-analysis
-# imports: http://realprov.org/ns/custody
-# imports: http://www.w3.org/ns/prov
-# imports: http://www.w3.org/ns/sosa/sampling
-# imports: http://www.w3.org/ns/ssn/
+# imports: http://realprov.org/ns/real-thing
 
 @prefix carb: <http://prov.example.org/real/carbonate-analysis/> .
-@prefix cust: <http://realprov.org/ns/custody#> .
 @prefix dct: <http://purl.org/dc/terms/> .
+@prefix locn: <http://www.w3.org/ns/locn#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix real: <http://example.org/real/> .
+@prefix real: <http://realprov.org/ns/real-thing#> .
 @prefix record: <http://example.org/record/> .
 @prefix sampling: <http://www.w3.org/ns/sosa/sampling/> .
 @prefix sosa: <http://www.w3.org/ns/sosa/> .
@@ -24,10 +21,7 @@
   dct:creator <http://registry.it.csiro.au/sandbox/csiro/person/Simon-Cox> ;
   dct:license <http://registry.it.csiro.au/licence/csiro-open-source-software-v1.0> ;
   dct:modified "2018-01-03" ;
-  owl:imports <http://realprov.org/ns/custody> ;
-  owl:imports <http://www.w3.org/ns/prov> ;
-  owl:imports sosa:sampling ;
-  owl:imports <http://www.w3.org/ns/ssn/> ;
+  owl:imports <http://realprov.org/ns/real-thing> ;
 .
 carb:CPV-2015-07-23
   rdf:type prov:Activity ;
@@ -89,7 +83,7 @@ carb:GeologistMA
   rdfs:label "Maham Aziz" ;
 .
 carb:GeologistMR
-  rdf:type cust:Custodian ;
+  rdf:type real:Custodian ;
   rdf:type prov:Agent ;
   rdfs:label "Michelle Rouse" ;
 .
@@ -113,10 +107,13 @@ carb:Hammer-b45
   rdfs:label "G-pick" ;
 .
 carb:IGSN-CSIWALF09
+  rdf:type real:Specimen ;
   rdf:type prov:Entity ;
   rdf:type sosa:Sample ;
-  cust:inCustodyOf carb:Sample-in-custody-of-geo ;
-  cust:inCustodyOf carb:Sample-in-custody-of-tech ;
+  dct:isReplacedBy carb:LF-09-1 ;
+  dct:isReplacedBy carb:LF-09-2 ;
+  real:inCustodyOf carb:Sample-in-custody-of-geo ;
+  real:inCustodyOf carb:Sample-in-custody-of-tech ;
   rdfs:label "LF-09" ;
   prov:wasDerivedFrom carb:LeedervilleFormation ;
   prov:wasGeneratedBy carb:FieldSampling-2015-03-25-47 ;
@@ -124,67 +121,87 @@ carb:IGSN-CSIWALF09
   sosa:isSampleOf carb:LeedervilleFormation ;
 .
 carb:LF-09-1
+  rdf:type real:Specimen ;
   rdf:type prov:Entity ;
   rdf:type sosa:Sample ;
   rdfs:label "specimen LF-09 - split part 1" ;
+  locn:location [
+      rdf:type dct:Location ;
+      rdfs:comment "In storage in Rock Store, CSIRO Kensington, WA" ;
+    ] ;
   prov:wasDerivedFrom carb:IGSN-CSIWALF09 ;
   prov:wasGeneratedBy carb:Splitting-2015-04-18-9 ;
   sosa:isSampleOf carb:LeedervilleFormation ;
   sampling:hasSampleRelationship [
       rdf:type sampling:SampleRelationship ;
-      sampling:natureOfRelationship carb:UnbiasedSplit ;
+      sampling:natureOfRelationship carb:UnbiasedSplitOf ;
       sampling:relatedSample carb:IGSN-CSIWALF09 ;
     ] ;
 .
 carb:LF-09-2
+  rdf:type real:Specimen ;
   rdf:type prov:Entity ;
   rdf:type sosa:Sample ;
+  dct:isReplacedBy carb:LF-09-2-pulp ;
   rdfs:label "specimen LF-09 - split part 2" ;
   prov:wasDerivedFrom carb:IGSN-CSIWALF09 ;
   prov:wasGeneratedBy carb:Splitting-2015-04-18-9 ;
   sosa:isSampleOf carb:LeedervilleFormation ;
   sampling:hasSampleRelationship [
       rdf:type sampling:SampleRelationship ;
-      sampling:natureOfRelationship carb:UnbiasedSplit ;
+      sampling:natureOfRelationship carb:UnbiasedSplitOf ;
       sampling:relatedSample carb:IGSN-CSIWALF09 ;
     ] ;
 .
 carb:LF-09-2-gt-80
+  rdf:type real:Specimen ;
   rdf:type prov:Entity ;
   rdf:type sosa:Sample ;
   rdfs:label "specimen LF-09 - split part 2 - crushed - gt tyler 80" ;
+  locn:location [
+      rdf:type dct:Location ;
+      rdfs:comment "Envelope, Cabinet 3a, Lab 4, CSIRO Kensington WA" ;
+    ] ;
   prov:wasDerivedFrom carb:LF-09-2-pulp ;
   prov:wasGeneratedBy carb:Sieving-2015-07-18 ;
   sosa:isSampleOf carb:LeedervilleFormation ;
   sampling:hasSampleRelationship [
       rdf:type sampling:SampleRelationship ;
-      sampling:natureOfRelationship carb:SievedFraction ;
+      sampling:natureOfRelationship carb:SievedFractionOf ;
       sampling:relatedSample carb:LF-09-2-pulp ;
     ] ;
 .
 carb:LF-09-2-lt-80
+  rdf:type real:Specimen ;
   rdf:type prov:Entity ;
   rdf:type sosa:Sample ;
   rdfs:label "specimen LF-09 - split part 2 - crushed - lt tyler 80" ;
+  locn:location [
+      rdf:type dct:Location ;
+      rdfs:comment "Envelope, Cabinet 3a, Lab 4, CSIRO Kensington WA" ;
+    ] ;
   prov:wasDerivedFrom carb:LF-09-2-pulp ;
   prov:wasGeneratedBy carb:Sieving-2015-07-18 ;
   sosa:isSampleOf carb:LeedervilleFormation ;
   sampling:hasSampleRelationship [
       rdf:type sampling:SampleRelationship ;
-      sampling:natureOfRelationship carb:SievedFraction ;
+      sampling:natureOfRelationship carb:SievedFractionOf ;
       sampling:relatedSample carb:LF-09-2-pulp ;
     ] ;
 .
 carb:LF-09-2-pulp
+  rdf:type real:Specimen ;
   rdf:type prov:Entity ;
   rdf:type sosa:Sample ;
+  dct:isReplacedBy carb:LF-09-2-gt-80 ;
+  dct:isReplacedBy carb:LF-09-2-lt-80 ;
   rdfs:label "specimen LF-09 - split part 2 - crushed" ;
   prov:wasDerivedFrom carb:LF-09-2 ;
   prov:wasGeneratedBy carb:Grinding-2015-07-18-6 ;
   sosa:isSampleOf carb:LeedervilleFormation ;
   sampling:hasSampleRelationship [
       rdf:type sampling:SampleRelationship ;
-      sampling:natureOfRelationship carb:Pulp ;
+      sampling:natureOfRelationship carb:PulpOf ;
       sampling:relatedSample carb:LF-09-2 ;
     ] ;
 .
@@ -202,13 +219,15 @@ carb:ProportionCarbonate
   rdf:type sosa:ObservableProperty ;
   rdfs:label "Proportion of Carbonate" ;
 .
-carb:Pulp
+carb:PulpOf
   rdf:type sampling:RelationshipNature ;
-  rdfs:label "Pulp derived from parent by grinding" ;
+  rdfs:comment "Pulp derived from parent by grinding" ;
+  rdfs:label "Ground pulp" ;
 .
 carb:Sample-in-custody-of-geo
-  rdf:type cust:CustodyInterval ;
-  cust:hasCustodyOf carb:IGSN-CSIWALF09 ;
+  rdf:type real:CustodyInterval ;
+  real:hasCustodyOf carb:IGSN-CSIWALF09 ;
+  time:hasEnd carb:Sample-transferred-geo-tech ;
   time:intervalMeets carb:Sample-in-custody-of-tech ;
   time:intervalMetBy carb:FieldSampling-2015-03-25-47 ;
   prov:endedAtTime "2015-04-17T12:00:00"^^xsd:dateTime ;
@@ -216,22 +235,32 @@ carb:Sample-in-custody-of-geo
   prov:wasAssociatedWith carb:GeologistMR ;
 .
 carb:Sample-in-custody-of-tech
-  rdf:type cust:CustodyInterval ;
-  cust:hasCustodyOf carb:IGSN-CSIWALF09 ;
+  rdf:type real:CustodyInterval ;
+  real:hasCustodyOf carb:IGSN-CSIWALF09 ;
+  time:hasBeginning carb:Sample-transferred-geo-tech ;
   time:intervalMeets carb:Splitting-2015-04-18-9 ;
   time:intervalMetBy carb:Sample-in-custody-of-geo ;
   prov:endedAtTime "2015-04-18T12:00:00"^^xsd:dateTime ;
   prov:startedAtTime "2015-04-17T12:00:00"^^xsd:dateTime ;
   prov:wasAssociatedWith carb:TechnicianAD ;
 .
+carb:Sample-transferred-geo-tech
+  rdf:type real:CustodyTransfer ;
+  rdf:type time:Instant ;
+  real:newCustodian carb:TechnicianAD ;
+  real:oldCustodian carb:GeologistMR ;
+  real:transfersCustodyOf carb:IGSN-CSIWALF09 ;
+  time:inXSDDateTimeStamp "2015-04-17T12:00:00+08:00"^^xsd:dateTimeStamp ;
+.
 carb:Saw-s4
   rdf:type prov:Agent ;
   rdf:type sosa:Sampler ;
   rdfs:label "Diamond saw" ;
 .
-carb:SievedFraction
+carb:SievedFractionOf
   rdf:type sampling:RelationshipNature ;
-  rdfs:label "Part derived from parent through sieving" ;
+  rdfs:comment "Part derived from parent through sieving" ;
+  rdfs:label "Sieved fraction" ;
 .
 carb:Sieving-2015-07-18
   rdf:type prov:Activity ;
@@ -266,7 +295,7 @@ carb:Splitting-2015-04-18-9
   sosa:resultTime "2015-04-18T12:05:00"^^xsd:dateTime ;
 .
 carb:TechnicianAD
-  rdf:type cust:Custodian ;
+  rdf:type real:Custodian ;
   rdf:type prov:Agent ;
   rdfs:label "Amelia Davis" ;
 .
@@ -279,9 +308,10 @@ carb:TylerSieveStack-80-200
   rdf:type sosa:Sampler ;
   rdfs:label "Tyler gauge sieve stack" ;
 .
-carb:UnbiasedSplit
+carb:UnbiasedSplitOf
   rdf:type sampling:RelationshipNature ;
-  rdfs:label "Part derived from parent through unbiased division" ;
+  rdfs:comment "Part derived from parent through unbiased division or splitting" ;
+  rdfs:label "Unbiased split" ;
 .
 carb:VisualAnalysisProtocol
   rdf:type prov:Plan ;
@@ -304,4 +334,21 @@ carb:Viz-2015-08-02
   sosa:observedProperty carb:ProportionCarbonate ;
   sosa:resultTime "2015-08-02T12:30:00"^^xsd:dateTime ;
   sosa:usedProcedure carb:VisualAnalysisProtocol ;
+.
+real:Specimen
+  rdfs:subClassOf [
+      rdf:type owl:Class ;
+      owl:unionOf (
+          [
+            rdf:type owl:Restriction ;
+            owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onProperty dct:isReplacedBy ;
+          ]
+          [
+            rdf:type owl:Restriction ;
+            owl:cardinality "1"^^xsd:nonNegativeInteger ;
+            owl:onProperty locn:location ;
+          ]
+        ) ;
+    ] ;
 .
