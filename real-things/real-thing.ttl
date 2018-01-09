@@ -38,6 +38,10 @@ real:Custodian
   rdfs:label "Agent who has custody of an Entity" ;
   rdfs:subClassOf prov:Agent ;
 .
+real:CustodianRole
+  rdf:type prov:Role ;
+  rdfs:label "Custodian" ;
+.
 real:CustodyInterval
   rdf:type owl:Class ;
   rdfs:comment "CustodyInterval is modeled as a subclass of prov:Activity because of its association with a prov:Agent, and used a prov:Entity" ;
@@ -130,12 +134,40 @@ real:Nothing
 Provided for use in succession relationships to indicate when a real thing has been destroyed.""" ;
   rdfs:label "Nothing" ;
 .
+real:hasCustodian
+  rdf:type owl:ObjectProperty ;
+  rdfs:comment "This specialization allows us to bind the role 'Custodian' to the association explicitly, instead of relying on adding an additional rdf:type to the individual agent. This is preferred since the role only applies to some associations involving a specific agent." ;
+  rdfs:domain real:CustodyInterval ;
+  rdfs:label "Custodian of the entity during the interval" ;
+  rdfs:range real:Custodian ;
+  rdfs:subPropertyOf prov:wasAssociatedWith ;
+  owl:propertyChainAxiom (
+      [
+        rdf:type owl:ObjectProperty ;
+        rdfs:range [
+            rdf:type owl:Class ;
+            rdfs:subClassOf prov:Association ;
+            rdfs:subClassOf [
+                rdf:type owl:Restriction ;
+                owl:hasValue real:CustodianRole ;
+                owl:onProperty prov:hadRole ;
+              ] ;
+          ] ;
+        rdfs:subPropertyOf prov:qualifiedAssociation ;
+      ]
+      prov:agent
+    ) ;
+.
 real:hasCustodyOf
   rdf:type owl:ObjectProperty ;
   rdfs:comment "An explicit property to indicate the custody entity is required because the object of a generic prov:used predicate might play other roles in the CustodyInterval" ;
   rdfs:domain real:CustodyInterval ;
   rdfs:range prov:Entity ;
   rdfs:subPropertyOf prov:used ;
+  owl:propertyChainAxiom (
+      prov:qualifiedUsage
+      prov:agent
+    ) ;
 .
 real:inCustodyOf
   rdf:type owl:ObjectProperty ;
@@ -147,6 +179,22 @@ real:newCustodian
   rdfs:label "Custodian of the entity after the transfer" ;
   rdfs:range real:Custodian ;
   rdfs:subPropertyOf prov:wasAssociatedWith ;
+  owl:propertyChainAxiom (
+      [
+        rdf:type owl:ObjectProperty ;
+        rdfs:range [
+            rdf:type owl:Class ;
+            rdfs:subClassOf prov:Association ;
+            rdfs:subClassOf [
+                rdf:type owl:Restriction ;
+                owl:hasValue real:CustodianRole ;
+                owl:onProperty prov:hadRole ;
+              ] ;
+          ] ;
+        rdfs:subPropertyOf prov:qualifiedAssociation ;
+      ]
+      prov:agent
+    ) ;
 .
 real:oldCustodian
   rdf:type owl:ObjectProperty ;
@@ -154,6 +202,22 @@ real:oldCustodian
   rdfs:label "Custodian of the entity before the transfer" ;
   rdfs:range real:Custodian ;
   rdfs:subPropertyOf prov:wasAssociatedWith ;
+  owl:propertyChainAxiom (
+      [
+        rdf:type owl:ObjectProperty ;
+        rdfs:range [
+            rdf:type owl:Class ;
+            rdfs:subClassOf prov:Association ;
+            rdfs:subClassOf [
+                rdf:type owl:Restriction ;
+                owl:hasValue real:CustodianRole ;
+                owl:onProperty prov:hadRole ;
+              ] ;
+          ] ;
+        rdfs:subPropertyOf prov:qualifiedAssociation ;
+      ]
+      prov:agent
+    ) ;
 .
 real:transfersCustodyOf
   rdf:type owl:ObjectProperty ;
@@ -161,4 +225,8 @@ real:transfersCustodyOf
   rdfs:domain real:CustodyTransfer ;
   rdfs:range prov:Entity ;
   rdfs:subPropertyOf prov:used ;
+  owl:propertyChainAxiom (
+      prov:qualifiedUsage
+      prov:agent
+    ) ;
 .

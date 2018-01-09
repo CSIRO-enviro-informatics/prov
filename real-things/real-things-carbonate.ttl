@@ -232,6 +232,7 @@ carb:PulpOf
 .
 carb:Sample-in-custody-of-geo
   rdf:type real:CustodyInterval ;
+  real:hasCustodian carb:GeologistMR ;
   real:hasCustodyOf carb:IGSN-CSIWALF09 ;
   time:hasEnd carb:Sample-transferred-geo-tech ;
   time:intervalMeets carb:Sample-in-custody-of-tech ;
@@ -242,6 +243,7 @@ carb:Sample-in-custody-of-geo
 .
 carb:Sample-in-custody-of-tech
   rdf:type real:CustodyInterval ;
+  real:hasCustodian carb:TechnicianAD ;
   real:hasCustodyOf carb:IGSN-CSIWALF09 ;
   time:hasBeginning carb:Sample-transferred-geo-tech ;
   time:intervalMeets carb:Splitting-2015-04-18-9 ;
