@@ -238,7 +238,18 @@ carb:Sample-in-custody-of-geo
   time:intervalMeets carb:Sample-in-custody-of-tech ;
   time:intervalMetBy carb:FieldSampling-2015-03-25-47 ;
   prov:endedAtTime "2015-04-17T12:00:00"^^xsd:dateTime ;
+  prov:qualifiedAssociation [
+      rdf:type prov:Association ;
+      prov:agent carb:GeologistMR ;
+      prov:hadRole real:custodianRole ;
+    ] ;
+  prov:qualifiedUsage [
+      rdf:type prov:Usage ;
+      prov:entity carb:IGSN-CSIWALF09 ;
+      prov:hadRole real:entityInCustody ;
+    ] ;
   prov:startedAtTime "2015-03-25T12:15:00"^^xsd:dateTime ;
+  prov:used carb:IGSN-CSIWALF09 ;
   prov:wasAssociatedWith carb:GeologistMR ;
 .
 carb:Sample-in-custody-of-tech
@@ -249,7 +260,18 @@ carb:Sample-in-custody-of-tech
   time:intervalMeets carb:Splitting-2015-04-18-9 ;
   time:intervalMetBy carb:Sample-in-custody-of-geo ;
   prov:endedAtTime "2015-04-18T12:00:00"^^xsd:dateTime ;
+  prov:qualifiedAssociation [
+      rdf:type prov:Association ;
+      prov:agent carb:TechnicianAD ;
+      prov:hadRole real:custodianRole ;
+    ] ;
+  prov:qualifiedUsage [
+      rdf:type prov:Usage ;
+      prov:entity carb:IGSN-CSIWALF09 ;
+      prov:hadRole real:entityInCustody ;
+    ] ;
   prov:startedAtTime "2015-04-17T12:00:00"^^xsd:dateTime ;
+  prov:used carb:IGSN-CSIWALF09 ;
   prov:wasAssociatedWith carb:TechnicianAD ;
 .
 carb:Sample-transferred-geo-tech
@@ -259,6 +281,24 @@ carb:Sample-transferred-geo-tech
   real:oldCustodian carb:GeologistMR ;
   real:transfersCustodyOf carb:IGSN-CSIWALF09 ;
   time:inXSDDateTimeStamp "2015-04-17T12:00:00+08:00"^^xsd:dateTimeStamp ;
+  prov:qualifiedAssociation [
+      rdf:type prov:Association ;
+      prov:agent carb:GeologistMR ;
+      prov:hadRole real:oldCustodianRole ;
+    ] ;
+  prov:qualifiedAssociation [
+      rdf:type prov:Association ;
+      prov:agent carb:TechnicianAD ;
+      prov:hadRole real:newCustodianRole ;
+    ] ;
+  prov:qualifiedUsage [
+      rdf:type prov:Usage ;
+      prov:entity carb:IGSN-CSIWALF09 ;
+      prov:hadRole real:entityInCustody ;
+    ] ;
+  prov:used carb:IGSN-CSIWALF09 ;
+  prov:wasAssociatedWith carb:GeologistMR ;
+  prov:wasAssociatedWith carb:TechnicianAD ;
 .
 carb:Saw-s4
   rdf:type prov:Agent ;

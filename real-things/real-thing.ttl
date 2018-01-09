@@ -38,10 +38,6 @@ real:Custodian
   rdfs:label "Agent who has custody of an Entity" ;
   rdfs:subClassOf prov:Agent ;
 .
-real:CustodianRole
-  rdf:type prov:Role ;
-  rdfs:label "Custodian" ;
-.
 real:CustodyInterval
   rdf:type owl:Class ;
   rdfs:comment "CustodyInterval is modeled as a subclass of prov:Activity because of its association with a prov:Agent, and used a prov:Entity" ;
@@ -134,9 +130,17 @@ real:Nothing
 Provided for use in succession relationships to indicate when a real thing has been destroyed.""" ;
   rdfs:label "Nothing" ;
 .
+real:custodianRole
+  rdf:type prov:Role ;
+  rdfs:label "Custodian role" ;
+.
+real:entityInCustody
+  rdf:type prov:Role ;
+  rdfs:label "Entity in custody" ;
+.
 real:hasCustodian
   rdf:type owl:ObjectProperty ;
-  rdfs:comment "This specialization allows us to bind the role 'Custodian' to the association explicitly, instead of relying on adding an additional rdf:type to the individual agent. This is preferred since the role only applies to some associations involving a specific agent." ;
+  rdfs:comment "This specialization allows us to bind the custodian role to the association explicitly, instead of relying on adding an additional rdf:type to the individual agent. This is preferred since the role only applies to this associations involving the specified agent." ;
   rdfs:domain real:CustodyInterval ;
   rdfs:label "Custodian of the entity during the interval" ;
   rdfs:range real:Custodian ;
@@ -149,7 +153,7 @@ real:hasCustodian
             rdfs:subClassOf prov:Association ;
             rdfs:subClassOf [
                 rdf:type owl:Restriction ;
-                owl:hasValue real:CustodianRole ;
+                owl:hasValue real:custodianRole ;
                 owl:onProperty prov:hadRole ;
               ] ;
           ] ;
@@ -165,8 +169,20 @@ real:hasCustodyOf
   rdfs:range prov:Entity ;
   rdfs:subPropertyOf prov:used ;
   owl:propertyChainAxiom (
-      prov:qualifiedUsage
-      prov:agent
+      [
+        rdf:type owl:ObjectProperty ;
+        rdfs:range [
+            rdf:type owl:Class ;
+            rdfs:subClassOf prov:Usage ;
+            rdfs:subClassOf [
+                rdf:type owl:Restriction ;
+                owl:hasValue real:entityInCustody ;
+                owl:onProperty prov:hadRole ;
+              ] ;
+          ] ;
+        rdfs:subPropertyOf prov:qualifiedUsage ;
+      ]
+      prov:entity
     ) ;
 .
 real:inCustodyOf
@@ -187,7 +203,7 @@ real:newCustodian
             rdfs:subClassOf prov:Association ;
             rdfs:subClassOf [
                 rdf:type owl:Restriction ;
-                owl:hasValue real:CustodianRole ;
+                owl:hasValue real:newCustodianRole ;
                 owl:onProperty prov:hadRole ;
               ] ;
           ] ;
@@ -195,6 +211,10 @@ real:newCustodian
       ]
       prov:agent
     ) ;
+.
+real:newCustodianRole
+  rdf:type prov:Role ;
+  rdfs:label "New (subsequent) custodian role" ;
 .
 real:oldCustodian
   rdf:type owl:ObjectProperty ;
@@ -210,7 +230,7 @@ real:oldCustodian
             rdfs:subClassOf prov:Association ;
             rdfs:subClassOf [
                 rdf:type owl:Restriction ;
-                owl:hasValue real:CustodianRole ;
+                owl:hasValue real:oldCustodianRole ;
                 owl:onProperty prov:hadRole ;
               ] ;
           ] ;
@@ -219,6 +239,10 @@ real:oldCustodian
       prov:agent
     ) ;
 .
+real:oldCustodianRole
+  rdf:type prov:Role ;
+  rdfs:label "Old (prior) custodian role" ;
+.
 real:transfersCustodyOf
   rdf:type owl:ObjectProperty ;
   rdfs:comment "Link to the entity whose custody is being transferred" ;
@@ -226,7 +250,19 @@ real:transfersCustodyOf
   rdfs:range prov:Entity ;
   rdfs:subPropertyOf prov:used ;
   owl:propertyChainAxiom (
-      prov:qualifiedUsage
-      prov:agent
+      [
+        rdf:type owl:ObjectProperty ;
+        rdfs:range [
+            rdf:type owl:Class ;
+            rdfs:subClassOf prov:Usage ;
+            rdfs:subClassOf [
+                rdf:type owl:Restriction ;
+                owl:hasValue real:entityInCustody ;
+                owl:onProperty prov:hadRole ;
+              ] ;
+          ] ;
+        rdfs:subPropertyOf prov:qualifiedUsage ;
+      ]
+      prov:entity
     ) ;
 .
