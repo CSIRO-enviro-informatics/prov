@@ -126,6 +126,31 @@ is provided to support the last case.""" ;
           ]
         ) ;
     ] ;
+  rdfs:subClassOf [
+      rdf:type owl:Restriction ;
+      owl:minCardinality "1"^^xsd:nonNegativeInteger ;
+      owl:onProperty real:hasMass ;
+    ] ;
+.
+real:SimpleMeasure
+  rdf:type owl:Class ;
+  rdfs:comment "Simple implementation of a scaled number as an (amount, unit) pair" ;
+  rdfs:label "Simple measure (quantity)" ;
+  rdfs:subClassOf [
+      rdf:type owl:Restriction ;
+      owl:cardinality "1"^^xsd:nonNegativeInteger ;
+      owl:onProperty real:uom ;
+    ] ;
+  owl:equivalentClass [
+      rdf:type owl:Restriction ;
+      owl:cardinality "1"^^xsd:nonNegativeInteger ;
+      owl:onProperty real:amount ;
+    ] ;
+.
+real:amount
+  rdf:type owl:DatatypeProperty ;
+  rdfs:label "numeric amount value" ;
+  rdfs:range xsd:decimal ;
 .
 real:custodianRole
   rdf:type prov:Role ;
@@ -181,6 +206,10 @@ real:hasCustodyOf
       ]
       prov:entity
     ) ;
+.
+real:hasMass
+  rdf:type owl:ObjectProperty ;
+  rdfs:label "Mass of thing" ;
 .
 real:inCustodyOf
   rdf:type owl:ObjectProperty ;
@@ -274,4 +303,8 @@ real:transfersCustodyOf
       ]
       prov:entity
     ) ;
+.
+real:uom
+  rdf:type owl:ObjectProperty ;
+  rdfs:comment "Unit of measure or scale" ;
 .
