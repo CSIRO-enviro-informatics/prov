@@ -174,6 +174,16 @@ carb:IGSN-CSIWALF09
   prov:wasGeneratedBy carb:FieldSampling-2015-03-25-47 ;
   sosa:isResultOf carb:FieldSampling-2015-03-25-47 ;
   sosa:isSampleOf carb:LeedervilleFormation ;
+  sampling:hasSampleRelationship [
+      rdf:type sampling:SampleRelationship ;
+      sampling:natureOfRelationship carb:successor ;
+      sampling:relatedSample carb:LF-09-1 ;
+    ] ;
+  sampling:hasSampleRelationship [
+      rdf:type sampling:SampleRelationship ;
+      sampling:natureOfRelationship carb:successor ;
+      sampling:relatedSample carb:LF-09-2 ;
+    ] ;
 .
 carb:LF-09-1
   rdf:type real:Entity ;
@@ -192,10 +202,11 @@ carb:LF-09-1
     ] ;
   prov:wasDerivedFrom carb:IGSN-CSIWALF09 ;
   prov:wasGeneratedBy carb:Splitting-2015-04-18-9 ;
+  sosa:isResultOf carb:Splitting-2015-04-18-9 ;
   sosa:isSampleOf carb:LeedervilleFormation ;
   sampling:hasSampleRelationship [
       rdf:type sampling:SampleRelationship ;
-      sampling:natureOfRelationship carb:UnbiasedSplitOf ;
+      sampling:natureOfRelationship carb:unbiasedSplitOf ;
       sampling:relatedSample carb:IGSN-CSIWALF09 ;
     ] ;
 .
@@ -213,6 +224,7 @@ carb:LF-09-2
     ] ;
   prov:wasDerivedFrom carb:IGSN-CSIWALF09 ;
   prov:wasGeneratedBy carb:Splitting-2015-04-18-9 ;
+  sosa:isResultOf carb:Splitting-2015-04-18-9 ;
   sosa:isSampleOf carb:LeedervilleFormation ;
   sampling:hasSampleRelationship [
       rdf:type sampling:SampleRelationship ;
@@ -237,6 +249,7 @@ carb:LF-09-2-gt-80
     ] ;
   prov:wasDerivedFrom carb:LF-09-2-pulp ;
   prov:wasGeneratedBy carb:Sieving-2015-07-18 ;
+  sosa:isResultOf carb:Sieving-2015-07-18 ;
   sosa:isSampleOf carb:LeedervilleFormation ;
   sampling:hasSampleRelationship [
       rdf:type sampling:SampleRelationship ;
@@ -261,6 +274,7 @@ carb:LF-09-2-lt-80
     ] ;
   prov:wasDerivedFrom carb:LF-09-2-pulp ;
   prov:wasGeneratedBy carb:Sieving-2015-07-18 ;
+  sosa:isResultOf carb:Sieving-2015-07-18 ;
   sosa:isSampleOf carb:LeedervilleFormation ;
   sampling:hasSampleRelationship [
       rdf:type sampling:SampleRelationship ;
@@ -283,6 +297,7 @@ carb:LF-09-2-pulp
     ] ;
   prov:wasDerivedFrom carb:LF-09-2 ;
   prov:wasGeneratedBy carb:Grinding-2015-07-18-6 ;
+  sosa:isResultOf carb:Grinding-2015-07-18-6 ;
   sosa:isSampleOf carb:LeedervilleFormation ;
   sampling:hasSampleRelationship [
       rdf:type sampling:SampleRelationship ;
@@ -457,29 +472,44 @@ carb:Viz-2015-08-02
   sosa:resultTime "2015-08-02T12:30:00"^^xsd:dateTime ;
   sosa:usedProcedure carb:VisualAnalysisProtocol ;
 .
+carb:predecessor
+  rdf:type prov:Role ;
+  rdf:type sampling:RelationshipNature ;
+  rdfs:comment "Link to old entity that was transformed to create the current entity" ;
+  rdfs:label "Preceding entity" ;
+.
 carb:pulpOf
   rdf:type prov:Role ;
   rdf:type sampling:RelationshipNature ;
   rdfs:comment "Pulp derived from parent by grinding" ;
   rdfs:label "Ground pulp" ;
+  <http://www.w3.org/2004/02/skos/core#broader> carb:predecessor ;
 .
 carb:sampleOf
   rdf:type prov:Role ;
   rdf:type sampling:RelationshipNature ;
   rdfs:comment "Part derived from parent by sampling" ;
   rdfs:label "Sample of" ;
+  <http://www.w3.org/2004/02/skos/core#broader> carb:sourceOf ;
 .
 carb:sievedFractionOf
   rdf:type prov:Role ;
   rdf:type sampling:RelationshipNature ;
   rdfs:comment "Part derived from parent through sieving" ;
   rdfs:label "Sieved fraction" ;
+  <http://www.w3.org/2004/02/skos/core#broader> carb:predecessor ;
 .
 carb:sourceOf
   rdf:type prov:Role ;
   rdf:type sampling:RelationshipNature ;
   rdfs:comment "Source entity" ;
   rdfs:label "Source of" ;
+.
+carb:successor
+  rdf:type prov:Role ;
+  rdf:type sampling:RelationshipNature ;
+  rdfs:comment "Link to new entity that was the product of transformation of the current entity" ;
+  rdfs:label "Succeeding entity" ;
 .
 carb:tool
   rdf:type prov:Role ;
@@ -491,4 +521,5 @@ carb:unbiasedSplitOf
   rdf:type sampling:RelationshipNature ;
   rdfs:comment "Part derived from parent through unbiased division or splitting" ;
   rdfs:label "Unbiased split" ;
+  <http://www.w3.org/2004/02/skos/core#broader> carb:predecessor ;
 .
