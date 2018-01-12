@@ -189,6 +189,11 @@ carb:LF-09-1
   rdf:type real:Entity ;
   rdf:type prov:Entity ;
   rdf:type sosa:Sample ;
+  real:hasMass [
+      rdf:type real:SimpleMeasure ;
+      real:amount 0.8 ;
+      real:uom <http://qudt.org/vocab/unit/KG> ;
+    ] ;
   rdfs:label "specimen LF-09 - split part 1" ;
   prov:atLocation [
       rdf:type prov:Location ;

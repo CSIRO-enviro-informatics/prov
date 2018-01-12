@@ -120,16 +120,21 @@ is provided to support the last case.""" ;
             owl:onProperty dcterms:isReplacedBy ;
           ]
           [
-            rdf:type owl:Restriction ;
-            owl:cardinality "1"^^xsd:nonNegativeInteger ;
-            owl:onProperty prov:atLocation ;
+            rdf:type owl:Class ;
+            owl:intersectionOf (
+                [
+                  rdf:type owl:Restriction ;
+                  owl:cardinality "1"^^xsd:nonNegativeInteger ;
+                  owl:onProperty prov:atLocation ;
+                ]
+                [
+                  rdf:type owl:Restriction ;
+                  owl:cardinality "1"^^xsd:nonNegativeInteger ;
+                  owl:onProperty real:hasMass ;
+                ]
+              ) ;
           ]
         ) ;
-    ] ;
-  rdfs:subClassOf [
-      rdf:type owl:Restriction ;
-      owl:minCardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty real:hasMass ;
     ] ;
 .
 real:SimpleMeasure
