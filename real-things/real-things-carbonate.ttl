@@ -1,11 +1,14 @@
 # baseURI: http://prov.example.org/real/carbonate-analysis
 # imports: http://realprov.org/ns/real-thing
+# imports: http://www.w3.org/2003/01/geo/wgs84_pos
+# imports: http://www.w3.org/ns/locn
 # imports: http://www.w3.org/ns/sosa/prov
 # imports: http://www.w3.org/ns/sosa/sampling
 # imports: http://www.w3.org/ns/ssn/
 
 @prefix carb: <http://prov.example.org/real/carbonate-analysis/> .
 @prefix dct: <http://purl.org/dc/terms/> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
 @prefix locn: <http://www.w3.org/ns/locn#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
@@ -25,6 +28,8 @@
   dct:license <http://registry.it.csiro.au/licence/csiro-open-source-software-v1.0> ;
   dct:modified "2018-01-03" ;
   owl:imports <http://realprov.org/ns/real-thing> ;
+  owl:imports <http://www.w3.org/2003/01/geo/wgs84_pos> ;
+  owl:imports <http://www.w3.org/ns/locn> ;
   owl:imports sosa:prov ;
   owl:imports sosa:sampling ;
   owl:imports <http://www.w3.org/ns/ssn/> ;
@@ -76,7 +81,19 @@ carb:FieldSampling-2015-03-25-47
   rdfs:label "Specimen retrieval event" ;
   prov:atLocation [
       rdf:type prov:Location ;
-      rdfs:comment "In Western Australia" ;
+      rdfs:comment "... at some detailed location in Western Australia ..." ;
+      geo:location [
+          rdf:type geo:Point ;
+          geo:lat -31.66 ;
+          geo:long 115.81 ;
+        ] ;
+      locn:address [
+          rdf:type locn:Address ;
+          locn:adminUnitL1 "Australia" ;
+          locn:adminUnitL2 "Western Australia" ;
+          locn:postCode "6078" ;
+          locn:postName "Pinjar" ;
+        ] ;
     ] ;
   prov:endedAtTime "2015-03-25T12:15:00"^^xsd:dateTime ;
   prov:generated carb:IGSN-CSIWALF09 ;
